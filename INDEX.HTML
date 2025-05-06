@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Aircraft Gallery</title>
+    <style>
+
+
+      Okay, let's craft a suitable navigation bar for your aircraft gallery. Here's an HTML structure with basic CSS styling for a clean and functional navigation bar. You can easily adapt the links and styling to your specific needs.
+
+HTML
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aircraft Gallery</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #347a9c, #9dc2d1);
+            color: #dbeef5; /* Default text color */
+        }
+
+        nav {
+            background-color: #2c3e50; /* Dark background for contrast */
+            padding: 15px 20px;
+            padding-top:30px;
+            display: flex;
+            justify-content: space-between; /* Space out logo and links */
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ecf0f1; /* Light text for logo */
+            text-decoration: none;
+        }
+
+        .nav-links {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links li:first-child {
+            margin-left: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #ecf0f1;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #f39c12; /* Highlight on hover */
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-links {
+                margin-top: 10px;
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .nav-links li {
+                margin: 10px 0;
+                text-align: center;
+                width: 100%;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 10px 0;
+            }
+        }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #347a9c, #9dc2d1);
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0 10px;
+        }
+
+        header h1 {
+            font-size: 3.2rem;
+            font-weight: bold;
+            color: #fdfdcb;
+          
+            margin: 0;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            position: relative;
+            height: 220px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease, filter 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            filter: brightness(80%);
+        }
+
+        .label {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px 5px;
+            text-shadow: 1px 1px 3px black;
+            line-height: 1.4;
+            pointer-events: none; /* keeps text from being selected/clicked */
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content-wrapper {
+            display: flex;
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+            background-color: #111;
+        }
+
+        .modal-thumbnails {
+            width: 85px;
+            background-color: #222;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            overflow-y: auto;
+        }
+
+        .thumbnail {
+            width: 65px;
+            height: 65px;
+            margin-bottom: 6px;
+            border-radius: 2px;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.5;
+            border: 1px solid #333;
+            transition: opacity 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .thumbnail:hover {
+            opacity: 0.8;
+            border-color: #ddd;
+        }
+
+        .thumbnail.active {
+            opacity: 1;
+            border-color: #eee;
+            box-shadow: 0 0 5px #eee;
+        }
+
+        .modal-image-container {
+          width: 980px;
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            padding: 10px;
+        }
+
+        #modalImage {
+             width: 70%;
+          height: 90%;
+            object-fit: contain;
+        }
+
+
+
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h3 {
+            text-align: center;
+            color: #132743;
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        /* Button Styling */
+        .btn-toggle {
+            display: inline-block;
+            font-size: 18px;
+            background-color: #407088;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .btn-toggle:hover {
+            background-color: #335d6d;
+        }
+
+        input[type="button"] {
+            display: inline-block;
+            background-color: #407088;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+        }
+
+        input[type="button"]:hover {
+            background-color: #335d6d;
+        }
+
+        /* Content Toggle */
+        .toggle-content {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .card {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card img {
+            width: 300px;
+            height: auto;
+            border-radius: 8px 0 0 8px;
+        }
+
+        .card .details {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .card .details h2 {
+            color: #132743;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .card .details p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 10px 0;
+            color: #555;
+        }
+
+        .card .details span {
+            font-weight: 600;
+            color: #132743;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .card {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card img {
+                width: 80%;
+                margin-bottom: 20px;
+            }
+
+            .card .details {
+                padding: 15px;
+                text-align: center;
+            }
+
+            .btn-toggle {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            .card .details h2 {
+                font-size: 20px;
+            }
+
+            .card .details p {
+                font-size: 14px;
+            }
+        }
+
+
+
+
+
+        .about-section {
+    
+            font-family: Terchubet MS;
+       
+            color: #dbeef5; /* Default text color */
+    padding: 40px 20px;
+    text-align: center;
+
+}
+
+.about-content {
+    max-width: 800px;
+    margin: 0 auto;
+    border: 2px solid whitesmoke;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 50px;
+    padding-right: 20px;
+    border-radius: 10px;
+
+}
+
+.about-content h2 {
+    font-size: 2.7rem;
+    color: #2c3e50; /* Darker heading color */
+    margin-bottom: 20px;
+}
+
+.about-content p {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color:#680747;
+    text-align: left; /* Align text to the left for better readability in longer paragraphs */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .about-section {
+        padding: 30px 15px;
+    }
+
+    .about-content h2 {
+        font-size: 2rem;
+    }
+
+    .about-content p {
+        font-size: 1rem;
+    }
+}
+
+footer {
+    background-color: #2c3e50; /* Dark background, consistent with nav */
+    color: #ecf0f1; /* Light text */
+    padding: 20px 20px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+    display: flex;
+}
+
+.footer-links li {
+    margin: 0 15px;
+}
+
+.footer-links li a {
+    color: #ecf0f1;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-links li a:hover {
+    color: #f39c12; /* Highlight on hover, consistent with nav */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-links li {
+        margin: 5px 0;
+    }
+}
+
+
+
+
+    </style>
+</head>
+<body>
+<nav>
+        <a href="#" class="logo">Indian Aircraft Gallery</a>
+        <ul class="nav-links">
+            <li><a href="#index">Home</a></li>
+            <li><a href="#gal">Gallery</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#info">Information</a></li>
+        </ul>
+    </nav>
+  
+
+    <header>
+        <h1 style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif">Indian Aircraft Gallery</h1>
+    </header>
+
+    <div class="gallery" id="gal">
+        <div class="card" style="background-image: url('images/1.jpg');" onclick="openModal(0)">
+            <div class="label">C-17 -<br>Globemaster</div>
+        </div>
+        <div class="card" style="background-image: url('images/2.jpg');" onclick="openModal(1)">
+            <div class="label">Apache</div>
+        </div>
+        <div class="card" style="background-image: url('images/3.jpg');" onclick="openModal(2)">
+            <div class="label">ALH</div>
+        </div>
+        <div class="card" style="background-image: url('images/4.jpg');" onclick="openModal(3)">
+            <div class="label">Chinook</div>
+        </div>
+        <div class="card" style="background-image: url('images/5.jpg');" onclick="openModal(4)">
+            <div class="label">C130 J -<br>Hercules</div>
+        </div>
+        <div class="card" style="background-image: url('https://www.airforce-technology.com/wp-content/uploads/sites/6/2020/01/Featured-Image-Tejas-LCA.jpeg');" onclick="openModal(5)">
+            <div class="label">LCA Tejas</div>
+        </div>
+        <div class="card" style="background-image: url('https://images.indianexpress.com/2025/04/Rafale-jets.jpg');" onclick="openModal(6)">
+            <div class="label">Rafale</div>
+        </div>
+        <div class="card" style="background-image: url('https://www.airforce-technology.com/wp-content/uploads/static-progressive/PC-7%20aircraft.jpg');" onclick="openModal(7)">
+            <div class="label">PC-7 MKII<br>Pilatus</div>
+        </div>
+        <div class="card" style="background-image: url('images/6.jpg');" onclick="openModal(8)">
+            <div class="label">Skat</div>
+        </div>
+        <div class="card" style="background-image: url('https://www.sps-aviation.com/images/848.jpg');" onclick="openModal(9)">
+            <div class="label">Sarang</div>
+        </div>
+        <div class="card" style="background-image: url('images/7.jpg');" onclick="openModal(10)">
+            <div class="label">Hawk</div>
+        </div>
+    </div>
+
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <div class="modal-content-wrapper" onclick="event.stopPropagation()">
+            <div class="modal-thumbnails" id="modalThumbnails">
+                </div>
+            <div class="modal-image-container">
+                <img id="modalImage">
+            </div>
+        </div>
+    </div>
+<br>
+
+<hr>
+<br>
+
+<div class="container" id="info">
+    <h3>Aircraft Information</h3>
+    <br>
+
+    <label>
+        <input type="button" value="Show C-17 - Globemaster Information" onclick="toggleContent('c17')">
+    </label>
+    <div class="toggle-content" id="c17">
+        <p><strong>Name:</strong> C-17 Globemaster III</p>
+        <p><strong>Origin Country:</strong> United States</p>
+        <p><strong>✈️ Type:</strong> Transport</p>
+        <p><strong>⚙️ Specs:</strong></p>
+        <ul>
+            <li>Max Speed: 830 km/h</li>
+            <li>Range: 4,400 km</li>
+            <li>Capacity: 170,900 kg</li>
+            <li>Weight: 128,000 kg</li>
+            <li>Engine: Pratt & Whitney F117-PW-100</li>
+        </ul>
+        <p><strong>🛠 Usage in IAF:</strong> Since 2003</p>
+        <p><strong>📝 Historical Notes:</strong> A heavy-lift transport aircraft designed for rapid deployment of military supplies, vehicles, and personnel.</p>
+    </div>
+
+    <label>
+        <input type="button" value="Show Apache Information" onclick="toggleContent('apache')">
+    </label>
+    <div class="toggle-content" id="apache">
+        <p><strong>Name:</strong> AH-64 Apache</p>
+        <p><strong>Origin Country:</strong> United States</p>
+        <p><strong>✈️ Type:</strong> Attack Helicopter</p>
+        <p><strong>⚙️ Specs:</strong></p>
+        <ul>
+            <li>Max Speed: 280 km/h</li>
+            <li>Range: 480 km</li>
+            <li>Capacity: 2 (pilot & co-pilot)</li>
+            <li>Weight: 5,165 kg</li>
+            <li>Engine: T700-GE-701C</li>
+        </ul>
+        <p><strong>🛠 Usage in IAF:</strong> Since 2019</p>
+        <p><strong>📝 Historical Notes:</strong> A combat helicopter designed for all-weather, day-and-night operations, used primarily for anti-armor attacks.</p>
+    </div>
+
+    <label>
+        <input type="button" value="Show ALH Information" onclick="toggleContent('alh')">
+    </label>
+    <div class="toggle-content" id="alh">
+        <p><strong>Name:</strong> ALH Dhruv</p>
+        <p><strong>Origin Country:</strong> India</p>
+        <p><strong>✈️ Type:</strong> Multi-role Helicopter</p>
+        <p><strong>⚙️ Specs:</strong></p>
+        <ul>
+            <li>Max Speed: 300 km/h</li>
+            <li>Range: 700 km</li>
+            <li>Capacity: 14 troops</li>
+            <li>Weight: 5,500 kg</li>
+            <li>Engine: Turbomeca TM 333-2M2</li>
+        </ul>
+        <p><strong>🛠 Usage in IAF:</strong> Since 2002</p>
+        <p><strong>📝 Historical Notes:</strong> A versatile, multi-role helicopter developed by HAL (Hindustan Aeronautics Limited) for both military and civilian operations.</p>
+    </div>
+
+    <label>
+        <input type="button" value="Show Chinook Information" onclick="toggleContent('chinook')">
+    </label>
+    <div class="toggle-content" id="chinook">
+        <p><strong>Name:</strong> CH-47 Chinook</p>
+        <p><strong>Origin Country:</strong> United States</p>
+        <p><strong>✈️ Type:</strong> Heavy-lift Helicopter</p>
+        <p><strong>⚙️ Specs:</strong></p>
+        <ul>
+            <li>Max Speed: 300 km/h</li>
+            <li>Range: 926 km</li>
+            <li>Capacity: 10,886 kg</li>
+            <li>Weight: 22,680 kg</li>
+            <li>Engine: Honeywell T55-GA-714A</li>
+        </ul>
+        <p><strong>🛠 Usage in IAF:</strong> Since 2019</p>
+        <p><strong>📝 Historical Notes:</strong> A tandem-rotor heavy-lift helicopter primarily used for transporting troops, equipment, and supplies in combat zones.</p>
+    </div>
+
+    <label>
+        <input type="button" value="Show C130 J - Hercules Information" onclick="toggleContent('c130')">
+    </label>
+    <div class="toggle-content" id="c130">
+        <p><strong>Name:</strong> C-130J Hercules</p>
+        <p><strong>Origin Country:</strong> United States</p>
+        <p><strong>✈️ Type:</strong> Transport</p>
+        <p><strong>⚙️ Specs:</strong></p>
+        <ul>
+            <li>Max Speed: 670 km/h</li>
+            <li>Range: 3,800 km</li>
+            <li>Capacity: 19,000 kg</li>
+            <li>Weight: 70,000 kg</li>
+            <li>Engine: Rolls-Royce AE 2100D3</li>
+        </ul>
+        <p><strong>🛠 Usage in IAF:</strong> Since 2013</p>
+        <p><strong>📝 Historical Notes:</strong> A versatile military transport aircraft used for moving personnel, cargo, and performing aerial refueling operations.</p>
+    </div>
+
+    <label>
+        <input type="button" value="Show LCA Tejas Information" onclick="toggleContent('lca')">
+    </label>
+    <div class="toggle-content" id="lca">
+        <p><strong>Name:</strong> LCA Tejas</p>
+        <p><strong>Origin Country:</strong> India</p>
+        <p><strong>✈️ Type:</strong> Light Combat Aircraft</p>
+        <p><strong>⚙️ Specs:</strong></p>
+        <ul>
+            <li>Max Speed: 1,350 km/h</li>
+            <li>Range: 500 km</li>
+            <li>Capacity: 1</li>
+            <li>Weight: 6,000 kg</li>
+            <li>Engine: GE F404-IN20</li>
+        </ul>
+        <p><strong>🛠 Usage in IAF:</strong> Since 2016</p>
+        <p><strong>📝 Historical Notes:</strong> A multi-role, single-engine, lightweight fighter aircraft developed by HAL, designed for both air-to-air and air-to-ground combat.</p>
+    </div>
+
+    <label>
+        <input type="button" value="Show Rafale Information" onclick="toggleContent('rafale')">
+    </label>
+    <div class="toggle-content" id="rafale">
+        <p><strong>Name:</strong> Dassault Rafale</p>
+        <p><strong>Origin Country:</strong> France</p>
+        <p><strong>✈️ Type:</strong> Multi-role Fighter</p>
+        <p><strong>⚙️ Specs:</strong></p>
+        <ul>
+            <li>Max Speed: 1,912 km/h</li>
+            <li>Range: 3,700 km</li>
+            <li>Capacity: 1</li>
+            <li>Weight: 10,000 kg</li>
+            <li>Engine: Snecma M88</li>
+        </ul>
+        <p><strong>🛠 Usage in IAF:</strong> Since 2020</p>
+        <p><strong>📝 Historical Notes:</strong> A French twin-engine, multi-role fighter aircraft, known for its versatility in both air-to-air and air-to-ground missions.</p>
+    </div>
+
+    <label>
+        <input type="button" value="Show PC-7 MKII Pilatus Information" onclick="toggleContent('pc7')">
+    </label>
+    <div class="toggle-content" id="pc7">
+        <p><strong>Name:</strong> PC-7 MKII Pilatus</p>
+        <p><strong>Origin Country:</strong> Switzerland</p>
+        <p><strong>✈️ Type:</strong> Trainer Aircraft</p>
+        <p><strong>⚙️ Specs:</strong></p>
+        <ul>
+            <li>Max Speed: 500 km/h</li>
+            <li>Range: 1,300 km</li>
+            <li>Capacity: 2</li>
+            <li>Weight: 2,300 kg</li>
+            <li>Engine: Pratt & Whitney PT6A-25C</li>
+        </ul>
+        <p><strong>🛠 Usage in IAF:</strong> Since 2009</p>
+        <p><strong>📝 Historical Notes:</strong> A Swiss turboprop trainer aircraft, used by the IAF for basic and advanced flight training.</p>
+    </div>
+
+    <label>
+        <input type="button" value="Show Skat Information" onclick="toggleContent('skat')">
+    </label>
+    <div class="toggle-content" id="skat">
+        <p><strong>Name:</strong> Skat</p>
+        <p><strong>Origin Country:</strong> Russia</p>
+        <p><strong>✈️ Type:</strong> Unmanned Aerial Vehicle (UAV)</p>
+        <p><strong>⚙️ Specs:</strong></p>
+        <ul>
+            <li>Max Speed: 700 km/h</li>
+            <li>Range: 1,000 km</li>
+            <li>Capacity: N/A</li>
+            <li>Weight: 1,200 kg</li>
+            <li>Engine: Turbofan</li>
+        </ul>
+        <p><strong>🛠 Usage in IAF:</strong> No current usage</p>
+        <p><strong>📝 Historical Notes:</strong> A Russian stealth UAV used primarily for reconnaissance and surveillance.</p>
+    </div>
+
+    <label>
+        <input type="button" value="Show Sarang Information" onclick="toggleContent('sarang')">
+    </label>
+    <div class="toggle-content" id="sarang">
+        <p><strong>Name:</strong> Sarang</p>
+        <p><strong>Origin Country:</strong> India</p>
+        <p><strong>✈️ Type:</strong> Helicopter Display Team</p>
+        <p><strong>⚙️ Specs:</strong></p>
+        <ul>
+            <li>Max Speed: 200 km/h</li>
+            <li>Range: 250 km</li>
+            <li>Capacity: 2 (pilot & co-pilot)</li>
+            <li>Weight: 1,000 kg</li>
+            <li>Engine: HAL/Turbomeca TM333-2M2</li>
+        </ul>
+        <p><strong>🛠 Usage in IAF:</strong> Active</p>
+        <p><strong>📝 Historical Notes:</strong> An aerobatic helicopter display team of the Indian Air Force, showcasing advanced helicopter flying techniques.</p>
+    </div>
+
+    <label>
+        <input type="button" value="Show Hawk Information" onclick="toggleContent('hawk')">
+    </label>
+    <div class="toggle-content" id="hawk">
+        <p><strong>Name:</strong> Hawk</p>
+        <p><strong>Origin Country:</strong> United Kingdom</p>
+        <p><strong>✈️ Type:</strong> Trainer Aircraft</p>
+        <p><strong>⚙️ Specs:</strong></p>
+        <ul>
+            <li>Max Speed: 1,050 km/h</li>
+            <li>Range: 2,000 km</li>
+            <li>Capacity: 2</li>
+            <li>Weight: 3,000 kg</li>
+            <li>Engine: Rolls-Royce Turbomeca Adour</li>
+        </ul>
+        <p><strong>🛠 Usage in IAF:</strong> Since 2009</p>
+        <p><strong>📝 Historical Notes:</strong> A British advanced trainer aircraft used for training pilots for both civilian and military aviation.</p>
+    </div>
+
+</div>
+<br>
+
+<hr>
+<br>
+
+<section id="about" class="about-section">
+    <div class="about-content">
+        <h2>About Our Aircraft Gallery</h2>
+        <p>Welcome to our dedicated online gallery showcasing a diverse collection of incredible aircraft. From powerful military transporters and agile helicopters to cutting-edge fighter jets and versatile training aircraft, we aim to capture the beauty, engineering marvel, and sheer awe of aviation.</p>
+        <p>Our passion for flight and the machines that make it possible drives us to curate high-quality images and provide interesting insights. Whether you're an aviation enthusiast, a student of aerospace, or simply curious about the wonders of the sky, we hope you'll find something captivating within our virtual hangar.</p>
+        <p>This gallery is a continuously evolving project. We are always on the lookout for stunning new images and information to share. Feel free to explore, enjoy, and perhaps even discover a new favorite aircraft!</p>
+        </div>
+</section>
+
+
+
+<script>
+    function toggleContent(id) {
+        var content = document.getElementById(id);
+        // Toggle display
+        content.style.display = content.style.display === "block" ? "none" : "block";
+    }
+</script>
+    <script>
+
+        
+        const imageUrls = [
+            'images/1.jpg',
+            'images/2.jpg',
+            'images/3.jpg',
+            'images/4.jpg',
+            'images/5.jpg',
+            'https://www.airforce-technology.com/wp-content/uploads/sites/6/2020/01/Featured-Image-Tejas-LCA.jpeg',
+            'https://images.indianexpress.com/2025/04/Rafale-jets.jpg',
+            'https://www.airforce-technology.com/wp-content/uploads/static-progressive/PC-7%20aircraft.jpg',
+            'images/6.jpg',
+            'https://www.sps-aviation.com/images/848.jpg',
+            'images/7.jpg'
+        ];
+
+        const imageLabels = [
+            'C-17 - Globemaster',
+            'Apache',
+            'ALH',
+            'Chinook',
+            'C130 J - Hercules',
+            'LCA Tejas',
+            'Rafale',
+            'PC-7 MKII Pilatus',
+            'Skat',
+            'Sarang',
+            'Hawk'
+        ];
+
+        const modal = document.getElementById("imageModal");
+        const modalImage = document.getElementById("modalImage");
+        const modalThumbnails = document.getElementById("modalThumbnails");
+        let currentImageIndex = 0;
+
+        function openModal(index) {
+            currentImageIndex = index;
+            modalImage.src = imageUrls[index];
+            generateThumbnails();
+            setActiveThumbnail(index);
+            modal.style.display = "flex";
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        function generateThumbnails() {
+            modalThumbnails.innerHTML = ''; // Clear previous thumbnails
+            imageUrls.forEach((url, index) => {
+                const thumbnail = document.createElement('div');
+                thumbnail.classList.add('thumbnail');
+                thumbnail.style.backgroundImage = `url('${url}')`;
+                thumbnail.onclick = () => showThumbnail(index);
+                modalThumbnails.appendChild(thumbnail);
+            });
+        }
+
+        function showThumbnail(index) {
+            currentImageIndex = index;
+            modalImage.src = imageUrls[index];
+            setActiveThumbnail(index);
+        }
+
+        function setActiveThumbnail(index) {
+            const thumbnails = document.querySelectorAll('.modal-thumbnails .thumbnail');
+            thumbnails.forEach((thumb, i) => {
+                if (i === index) {
+                    thumb.classList.add('active');
+                } else {
+                    thumb.classList.remove('active');
+                }
+            });
+        }
+
+        // Optional: Add next and previous image navigation
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % imageUrls.length;
+            modalImage.src = imageUrls[currentImageIndex];
+             setActiveThumbnail(currentImageIndex);
+        }
+
+       function prevImage() {
+           currentImageIndex = (currentImageIndex - 1 + imageUrls.length) % imageUrls.length;
+           modalImage.src = imageUrls[currentImageIndex];
+            setActiveThumbnail(currentImageIndex);
+         }
+    </script>
+</body>
+<footer>
+    <div class="footer-content">
+        <p style="font-weight: bolder; font-size:22px; font-family: monospace;color: white;">Made with ❤️ by Prasad.</p>
+        
+        </ul>
+    </div>
+</footer>
+</html>
